@@ -1,0 +1,16 @@
+[Unit]
+Description=pretix background worker
+After=network.target
+
+[Service]
+User={{ pretix_user }}
+Group={{ pretix_group }}
+Environment="VIRTUAL_ENV={{ pretix_venv_path }}"
+Environment="PRETIX_CONFIG_FILE={{ pretix_config_path }}/pretix.cfg"
+Environment="PATH={{ pretix_venv_path }}/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart={{ pretix_venv_path }}/bin/celery -A pretix.celery_app worker -l info
+WorkingDirectory={{ pretix_base_path }}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,41 @@
+---
+### Installation
+pretix_user: "pretix"
+pretix_group: "{{ pretix_user }}"
+pretix_systemd_service_web_name: "pretix-web"
+pretix_systemd_service_worker_name: "pretix-worker"
+pretix_base_path: "/opt/pretix"
+pretix_config_path: "{{ pretix_base_path }}/config"
+pretix_venv_path: "{{ pretix_base_path }}/.venv"
+pretix_venv_command: "python3 -m venv"
+
+### Configuration
+#### Block: Pretix
+pretix_pretix_currency: "EUR"
+pretix_pretix_datadir: "{{ pretix_base_path }}/data"
+pretix_pretix_trust_x_forwarded_for: "off"
+pretix_pretix_trust_x_forwarded_proto: "off"
+
+#### Block: Locale
+pretix_locale_default: "en"
+pretix_locale_timezone: "UTC"
+
+#### Block: Database (empty)
+
+#### Block: Mail
+pretix_mail_from: "pretix@{{ ansible_fqdn }}"
+pretix_mail_host: "localhost"
+pretix_mail_port: 25
+pretix_mail_ssl: "off"
+pretix_mail_tls: "off"
+
+#### Block: Django
+pretix_django_debug: false
+
+#### Block: Metrics
+pretix_metrics_enabled: false
+
+#### Block: Memcached (empty)
+
+#### Block: Redis
+pretix_redis_session: true

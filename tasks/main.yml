@@ -1,0 +1,134 @@
+---
+- name: Create group
+  group:
+    name: "{{ pretix_group }}"
+    state: present
+
+- name: Create user
+  user:
+    name: "{{ pretix_user }}"
+    group: "{{ pretix_group }}"
+    create_home: yes
+    home: "{{ pretix_base_path }}"
+    shell: "/bin/bash"
+
+- name: Create data/media directory
+  file:
+    path: "{{ pretix_pretix_datadir }}/media"
+    owner: "{{ pretix_user }}"
+    group: "{{ pretix_group }}"
+    state: directory
+
+- name: Create config directory
+  file:
+    path: "{{ pretix_config_path }}"
+    owner: "{{ pretix_user }}"
+    group: "{{ pretix_group }}"
+    state: directory
+
+- name: Upload pretix config
+  template:
+    src: "pretix.cfg.j2"
+    dest: "{{ pretix_config_path }}/pretix.cfg"
+    owner: "{{ pretix_user }}"
+    group: "{{ pretix_group }}"
+    mode: 0600
+
+- name: Install required packages
+  apt:
+    name:
+      - git
+      - build-essential
+      - python3
+      - python3-venv
+      - python3-pip
+      - python3-dev
+      - libxml2-dev
+      - libxslt1-dev
+      - libffi-dev
+      - zlib1g-dev
+      - libssl-dev
+      - gettext
+      - libpq-dev
+      - libmariadbclient-dev
+      - libjpeg-dev
+      - libopenjp2-7-dev
+
+- name: Install gunicorn in virtualenv
+  pip:
+    name: "gunicorn"
+    virtualenv: "{{ pretix_venv_path }}"
+    virtualenv_command: "{{ pretix_venv_command }}"
+  become_user: "{{ pretix_user }}"
+
+- name: Install pretix with mysql support in virtualenv
+  pip:
+    name: "pretix[mysql]"
+    version: "{{ pretix_version }}"
+    virtualenv: "{{ pretix_venv_path }}"
+    virtualenv_command: "{{ pretix_venv_command }}"
+  become_user: "{{ pretix_user }}"
+  register: pip_pretix_installation_mysql
+  when: pretix_database_backend == "mysql"
+
+- name: Install pretix with postgresql support in virtualenv
+  pip:
+    name: "pretix[postgres]"
+    version: "{{ pretix_version }}"
+    virtualenv: "{{ pretix_venv_path }}"
+    virtualenv_command: "{{ pretix_venv_command }}"
+  become_user: "{{ pretix_user }}"
+  register: pip_pretix_installation_postgresql
+  when: pretix_database_backend == "postgresql"
+
+- name: Install pretix without mysql or postgresql support in virtualenv
+  pip:
+    name: "pretix[postgres]"
+    version: "{{ pretix_version }}"
+    virtualenv: "{{ pretix_venv_path }}"
+    virtualenv_command: "{{ pretix_venv_command }}"
+  become_user: "{{ pretix_user }}"
+  register: pip_pretix_installation_normal
+  when: pretix_database_backend != "mysql" and pretix_database_backend != "postgresql"
+
+- name: Run database migration
+  command: "{{ pretix_venv_path }}/bin/python -m pretix migrate"
+  args:
+    chdir: "{{ pretix_base_path }}"
+  environment:
+    PRETIX_CONFIG_FILE: "{{ pretix_config_path }}/pretix.cfg"
+  become_user: "{{ pretix_user }}"
+  when: pip_pretix_installation_mysql.changed or pip_pretix_installation_postgresql.changed or pip_pretix_installation_normal.changed
+
+- name: Run static file compilation
+  command: "{{ pretix_venv_path }}/bin/python -m pretix rebuild"
+  args:
+    chdir: "{{ pretix_base_path }}"
+  environment:
+    PRETIX_CONFIG_FILE: "{{ pretix_config_path }}/pretix.cfg"
+  become_user: "{{ pretix_user }}"
+  when: pip_pretix_installation_mysql.changed or pip_pretix_installation_postgresql.changed or pip_pretix_installation_normal.changed
+
+- name: Upload web systemd service file
+  template:
+    src: "web.service.j2"
+    dest: "/etc/systemd/system/{{ pretix_systemd_service_web_name }}.service"
+
+- name: Enable/Start web systemd service
+  systemd:
+    name: "{{ pretix_systemd_service_web_name }}.service"
+    daemon_reload: yes
+    enabled: yes
+    state: started
+
+- name: Upload worker systemd service file
+  template:
+    src: "worker.service.j2"
+    dest: "/etc/systemd/system/{{ pretix_systemd_service_worker_name }}.service"
+
+- name: Enable/Start worker systemd service
+  systemd:
+    name: "{{ pretix_systemd_service_worker_name }}.service"
+    daemon_reload: yes
+    enabled: yes
+    state: started

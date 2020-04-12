@@ -1,0 +1,23 @@
+galaxy_info:
+  role_name: pretix
+  author: em0lar
+  description: An ansible role to install pretix via pip
+
+  license: GPL-3.0-only
+
+  min_ansible_version: 2.9
+
+
+  platforms:
+  - name: Debian
+    versions:
+      - buster
+  - name: Ubuntu
+    versions:
+      - bionic
+      - disco
+      - eoan
+
+  galaxy_tags: []
+
+dependencies: []

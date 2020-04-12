@@ -1,0 +1,19 @@
+[Unit]
+Description=pretix web service
+After=network.target
+
+[Service]
+User={{ pretix_user }}
+Group={{ pretix_group }}
+Environment="VIRTUAL_ENV={{ pretix_venv_path }}"
+Environment="PRETIX_CONFIG_FILE={{ pretix_config_path }}/pretix.cfg"
+Environment="PATH={{ pretix_venv_path }}/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart={{ pretix_venv_path }}/bin/gunicorn pretix.wsgi \
+                      --name pretix --workers 5 \
+                      --max-requests 1200  --max-requests-jitter 50 \
+                      --log-level=info --bind={{ pretix_bind_address }}
+WorkingDirectory={{ pretix_base_path }}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

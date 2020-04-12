@@ -1,0 +1,85 @@
+[pretix]
+instance_name={{ pretix_pretix_instance_name }}
+url={{ pretix_pretix_url }}
+currency={{ pretix_pretix_currency }}
+datadir={{ pretix_pretix_datadir }}
+trust_x_forwarded_for={{ pretix_pretix_trust_x_forwarded_for }}
+trust_x_forwarded_proto={{ pretix_pretix_trust_x_forwarded_proto }}
+{% if pretix_pretix_additional_config is defined %}
+{{ pretix_pretix_additional_config }}
+{% endif %}
+
+[locale]
+default={{ pretix_locale_default }}
+timezone={{ pretix_locale_timezone }}
+
+[database]
+backend={{ pretix_database_backend }}
+name={{ pretix_database_name }}
+{% if pretix_database_backend != "sqlite3" %}
+user={{ pretix_database_user }}
+password={{ pretix_database_user }}
+host={{ pretix_database_host }}
+{% if pretix_database_galera is defined %}
+galera={{ pretix_database_galera }}
+{% endif %}
+{% endif %}
+{% if pretix_database_port is defined %}
+port={{ pretix_database_port }}
+{% endif %}
+
+[mail]
+from={{ pretix_mail_from }}
+host={{ pretix_mail_host }}
+port={{ pretix_mail_port }}
+{% if pretix_mail_user is defined %}
+user={{ pretix_mail_user }}
+{% endif %}
+{% if pretix_mail_password is defined %}
+password={{ pretix_mail_password }}
+{% endif %}
+tls={{ pretix_mail_tls }}
+ssl={{ pretix_mail_ssl }}
+{% if pretix_mail_admins is defined %}
+admins={{ pretix_mail_admins }}
+{% endif %}
+
+[django]
+{% if pretix_django_secret is defined %}
+secret={{ pretix_django_secret }}
+{% endif %}
+debug={{ pretix_django_debug }}
+{% if pretix_django_profile is defined %}
+profile={{ pretix_django_profile }}
+{% endif %}
+
+{% if pretix_metrics_enabled %}
+[metrics]
+enabled={{ pretix_metrics_enabled }}
+user={{ pretix_metrics_user }}
+passphrase={{ pretix_metrics_passphrase }}
+{% endif %}
+
+{% if pretix_memcached_location is defined %}
+[memcached]
+location={{ pretix_memcached_location }}
+{% endif %}
+
+{% if pretix_redis_location is defined %}
+[redis]
+location={{ pretix_redis_location }}
+sessions={{ pretix_redis_session }}
+{% endif %}
+
+[celery]
+broker={{ pretix_celery_broker }}
+backend={{ pretix_celery_backend }}
+
+{% if pretix_sentry_dsn is defined %}
+[sentry]
+dsn={{ pretix_sentry_dsn }}
+{% endif %}
+
+{% if pretix_additional_config is defined %}
+{{ pretix_additional_config }}
+{% endif %}
