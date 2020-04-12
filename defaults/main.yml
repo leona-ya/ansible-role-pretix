@@ -7,7 +7,7 @@ pretix_systemd_service_worker_name: "pretix-worker"
 pretix_base_path: "/opt/pretix"
 pretix_config_path: "{{ pretix_base_path }}/config"
 pretix_venv_path: "{{ pretix_base_path }}/.venv"
-pretix_venv_command: "python3 -m venv"
+pretix_venv_command: "/usr/bin/python3 -m venv"
 
 ### Configuration
 #### Block: Pretix

@@ -126,7 +126,8 @@ Including an example of how to use your role (for instance, with variables passe
         pretix_database_user: "pretix",
         pretix_database_password: "supersecurepassword",
         pretix_database_host: "localhost",
-        
+        pretix_celery_broker: "redis://localhost:6379/0",
+        pretix_celery_backend: "redis://localhost:6379/0"
       }
 ```
 ## License

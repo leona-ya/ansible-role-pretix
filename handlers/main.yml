@@ -1,0 +1,18 @@
+---
+- name: Run database migration
+  command: "{{ pretix_venv_path }}/bin/python -m pretix migrate"
+  args:
+    chdir: "{{ pretix_base_path }}"
+  environment:
+    PRETIX_CONFIG_FILE: "{{ pretix_config_path }}/pretix.cfg"
+  become: yes
+  become_user: "{{ pretix_user }}"
+
+- name: Run static file compilation
+  command: "{{ pretix_venv_path }}/bin/python -m pretix rebuild"
+  args:
+    chdir: "{{ pretix_base_path }}"
+  environment:
+    PRETIX_CONFIG_FILE: "{{ pretix_config_path }}/pretix.cfg"
+  become: yes
+  become_user: "{{ pretix_user }}"
