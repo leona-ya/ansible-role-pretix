@@ -5,6 +5,8 @@ Ansible role for a pretix manual installation.
 ## Requirements
 
 * Database: **PostgreSQL** _(recommended)_, MySQL (5.7 or newer) or MariaDB (10.2.7 or newer) or SQLite _(not recommended for production)_
+* Celery: Redis, RabbitMQ (or another specified in [Celery docs](https://docs.celeryproject.org/en/stable/getting-started/brokers/index.html))
+* Mail-Server (SMTP)
 
 ## Role Variables
 
