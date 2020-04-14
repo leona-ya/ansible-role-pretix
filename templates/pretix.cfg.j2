@@ -18,7 +18,7 @@ backend={{ pretix_database_backend }}
 name={{ pretix_database_name }}
 {% if pretix_database_backend != "sqlite3" %}
 user={{ pretix_database_user }}
-password={{ pretix_database_user }}
+password={{ pretix_database_password }}
 host={{ pretix_database_host }}
 {% if pretix_database_galera is defined %}
 galera={{ pretix_database_galera }}

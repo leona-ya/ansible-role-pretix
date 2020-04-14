@@ -24,13 +24,14 @@ Ansible role for a pretix manual installation.
 | `pretix_venv_path` | Python virtual environment path | `{{ pretix_base_path }}/.venv` | Should be a sub-directory of `pretix_base_path`; without a trailing slash
 | `pretix_venv_command` | Command for creating the virtual environment | `python3 -m venv` |
 | `pretix_bind_address` | Address gunicorn listens on _(required)_ |  | either socket or host:port
+| `pretix_cron_minute` | Minutes for the cronjob that runs the management command `runperiodic` | `15,45` | should be between every minute and every hour
 
 ### Configuration File (pretix.cfg)
 The configuration is built up, following https://docs.pretix.eu/en/latest/admin/config.html.
 #### Block: Pretix
 | Variable Name | Function | Default value | Comment |
 | ------------- | -------- | ------------- | ------- |
-| `pretix_pretix_instance_name` | Dynamic configuration directory path _(required)_ |  |
+| `pretix_pretix_instance_name` | Name of the pretix instance _(required)_ |  |
 | `pretix_pretix_url` | The installation’s full URL _(required)_ | | Without a trailing slash
 | `pretix_pretix_currency` | The default currency as a three-letter code | `EUR` |
 | `pretix_pretix_datadir` | The local path to a data directory that will be used for storing user uploads and similar data | `{{ pretix_base_path }}/data` |
@@ -119,7 +120,7 @@ Including an example of how to use your role (for instance, with variables passe
   roles:
      - {
         role: em0lar.pretix,
-        pretix_version: "v2.2.0",
+        pretix_version: "3.7.0",
         pretix_bind_address: "127.0.0.1:8000",
         pretix_pretix_instance_name: "Example Pretix",
         pretix_pretix_url: "https://pretix.example.org",

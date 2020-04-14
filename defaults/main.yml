@@ -8,6 +8,7 @@ pretix_base_path: "/opt/pretix"
 pretix_config_path: "{{ pretix_base_path }}/config"
 pretix_venv_path: "{{ pretix_base_path }}/.venv"
 pretix_venv_command: "/usr/bin/python3 -m venv"
+pretix_cron_minute: "15,45"
 
 ### Configuration
 #### Block: Pretix

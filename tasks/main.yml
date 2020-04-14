@@ -126,3 +126,11 @@
     daemon_reload: yes
     enabled: yes
     state: started
+
+- name: Create cronjob to run
+  cron:
+    name: "{{ pretix_pretix_instance_name }}: Management command runperiodic"
+    minute: "{{ pretix_cron_minute }}"
+    hour: "*"
+    user: "{{ pretix_user }}"
+    job: "export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix && python -m pretix runperiodic"
