@@ -4,6 +4,8 @@ pretix_user: "pretix"
 pretix_group: "{{ pretix_user }}"
 pretix_systemd_service_web_name: "pretix-web"
 pretix_systemd_service_worker_name: "pretix-worker"
+pretix_gunicorn_worker: 5
+pretix_celery_concurrency: 8
 pretix_base_path: "/opt/pretix"
 pretix_config_path: "{{ pretix_base_path }}/config"
 pretix_venv_path: "{{ pretix_base_path }}/.venv"

@@ -19,6 +19,8 @@ Ansible role for a pretix manual installation.
 | `pretix_version` | Version that is going to be installed _(required)_ |  |
 | `pretix_systemd_service_web_name` | The name of the web systemd service file | `pretix-web` |
 | `pretix_systemd_service_worker_name` | The name of the worker systemd service file | `pretix-worker` |
+| `pretix_gunicorn_worker` | Number of worker that gunicorn runs | `5` |
+| `pretix_celery_concurrency` | The name of the worker systemd service file | `8` |
 | `pretix_base_path` | Installation base path | `/opt/pretix` | Without a trailing slash
 | `pretix_config_path` | Installation base path | `{{ pretix_base_path }}/config` | Without a trailing slash  
 | `pretix_venv_path` | Python virtual environment path | `{{ pretix_base_path }}/.venv` | Should be a sub-directory of `pretix_base_path`; without a trailing slash
