@@ -16,3 +16,15 @@
     PRETIX_CONFIG_FILE: "{{ pretix_config_path }}/pretix.cfg"
   become: yes
   become_user: "{{ pretix_user }}"
+
+- name: Restart web systemd service
+  systemd:
+    name: "{{ pretix_systemd_service_web_name }}.service"
+    daemon_reload: yes
+    state: restarted
+
+- name: Restart worker systemd service
+  systemd:
+    name: "{{ pretix_systemd_service_worker_name }}.service"
+    daemon_reload: yes
+    state: restarted

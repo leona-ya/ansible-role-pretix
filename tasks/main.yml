@@ -114,6 +114,7 @@
     daemon_reload: yes
     enabled: yes
     state: started
+  notify: Restart web systemd service
 
 - name: Upload worker systemd service file
   template:
@@ -126,6 +127,7 @@
     daemon_reload: yes
     enabled: yes
     state: started
+  notify: Restart worker systemd service
 
 - name: Create cronjob to run
   cron:
