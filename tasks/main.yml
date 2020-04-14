@@ -107,6 +107,7 @@
   template:
     src: "web.service.j2"
     dest: "/etc/systemd/system/{{ pretix_systemd_service_web_name }}.service"
+  notify: Restart web systemd service
 
 - name: Enable/Start web systemd service
   systemd:
@@ -114,12 +115,12 @@
     daemon_reload: yes
     enabled: yes
     state: started
-  notify: Restart web systemd service
 
 - name: Upload worker systemd service file
   template:
     src: "worker.service.j2"
     dest: "/etc/systemd/system/{{ pretix_systemd_service_worker_name }}.service"
+  notify: Restart worker systemd service
 
 - name: Enable/Start worker systemd service
   systemd:
@@ -127,7 +128,6 @@
     daemon_reload: yes
     enabled: yes
     state: started
-  notify: Restart worker systemd service
 
 - name: Create cronjob to run
   cron:
