@@ -12,19 +12,16 @@
     home: "{{ pretix_base_path }}"
     shell: "/bin/bash"
 
-- name: Create data/media directory
+- name: Create required directories
   file:
-    path: "{{ pretix_pretix_datadir }}/media"
+    path: "{{ item }}"
     owner: "{{ pretix_user }}"
     group: "{{ pretix_group }}"
     state: directory
-
-- name: Create config directory
-  file:
-    path: "{{ pretix_config_path }}"
-    owner: "{{ pretix_user }}"
-    group: "{{ pretix_group }}"
-    state: directory
+  loop:
+    - "{{ pretix_pretix_datadir }}/media"
+    - "{{ pretix_pretix_datadir }}/logs"
+    - "{{ pretix_config_path }}"
 
 - name: Upload pretix config
   template:
@@ -53,6 +50,13 @@
       - libmariadbclient-dev
       - libjpeg-dev
       - libopenjp2-7-dev
+
+- name: Create venv directory
+  file:
+    path: "{{ pretix_venv_path }}"
+    owner: "{{ pretix_user }}"
+    group: "{{ pretix_group }}"
+    state: directory
 
 - name: Install gunicorn in virtualenv
   pip:
