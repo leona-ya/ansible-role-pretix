@@ -50,6 +50,7 @@
       - libmariadbclient-dev
       - libjpeg-dev
       - libopenjp2-7-dev
+      - nodejs
 
 - name: Create venv directory
   file:
@@ -139,4 +140,4 @@
     minute: "{{ pretix_cron_minute }}"
     hour: "*"
     user: "{{ pretix_user }}"
-    job: "export PATH=/var/pretix/venv/bin:$PATH && cd /var/pretix && python -m pretix runperiodic"
+    job: "export PATH={{ pretix_venv_path }}/bin:$PATH && cd {{ pretix_base_path }} && python -m pretix runperiodic"
