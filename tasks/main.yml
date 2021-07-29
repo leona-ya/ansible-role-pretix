@@ -58,6 +58,16 @@
     group: "{{ pretix_group }}"
     state: directory
 
+- name: Ensure pip ison the latest version
+  pip:
+    name: "pip"
+    state: "latest"
+    virtualenv: "{{ pretix_venv_path }}"
+    virtualenv_command: "{{ pretix_venv_command }}"
+  become: true
+  become_user: "{{ pretix_user }}"
+
+
 - name: Install gunicorn in virtualenv
   pip:
     name: "gunicorn"
